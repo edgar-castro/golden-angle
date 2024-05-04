@@ -75,8 +75,7 @@ function draw() {
             drawFinalIntercalado();
         break;
         default: 
-            // defaultScene()
-            drawFinalIntercalado();
+            defaultScene()
     }
 }
 

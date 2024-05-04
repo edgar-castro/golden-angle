@@ -8,7 +8,10 @@ const GOLDEN_ANGLE = 137.5
 const START_RADIUS = 10
 
 let selected_phase;
-let phases = ['inicio', 'polares', 'angulo', 'propagacion', 'final', 'mono', 'verde']
+let phases = ['inicio', 'polares', 'angulo', 'propagacion', 'final', 'mono', 'verde', 'intercalado', 'colores']
+
+let color_a = [217, 231, 247]
+let color_b = [239, 214, 238]
 
 //angulo
 let angle_1 = 0;
@@ -25,6 +28,14 @@ let angle_iterations_4 = 0;
 //verde
 let angle_5 = 0;
 let angle_iterations_5 = 0;
+// colores
+let angle_6 = 0;
+let angle_iterations_6 = 0;
+// colores 2 por si acaso jsjsjsjs
+let angle_7 = 0;
+let angle_iterations_7 = 0;
+
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(0)
@@ -57,8 +68,15 @@ function draw() {
         case 'verde': 
             drawFinalVerde();
         break;
+        case 'colores': 
+            drawFinalColores();
+        break;
+        case 'intercalado': 
+            drawFinalIntercalado();
+        break;
         default: 
-            defaultScene()
+            // defaultScene()
+            drawFinalIntercalado();
     }
 }
 
@@ -234,6 +252,77 @@ function drawFinalVerde(){
     }
     if(angle_iterations_2 < 800)
         setTimeout(() => { angle_iterations_5 += 1}, 500)
+}
+
+
+function drawFinalColores(){
+    background(0)
+    next_button.position(-1000, -1000)
+    prev_button.position(-1000, -1000)
+    slider.position(-1000, -1000)
+    const center = {x: width / 2, y: height / 2}
+    noStroke()
+    fill(255)
+    circle(center.x, center.y, 10)
+
+    let current_radius = START_RADIUS
+    for(let i = 0; i < angle_iterations_6; i++){
+        let current_golden_angle = GOLDEN_ANGLE * i;
+        if(i % 3 == 0) current_radius += 1
+        const coords = getPolarCoords(toRadians(current_golden_angle), current_radius);
+        const final_coords = sumCoordinates(center, coords)
+        let shape_color = calculateColorGradient(current_golden_angle)
+        fill(shape_color.r, shape_color.g, shape_color.b)
+        stroke(0)
+        strokeWeight(1)
+        push()
+        ellipse(final_coords.x, final_coords.y, i * 0.05, i * 0.08, 6)
+        pop()
+    }
+    if(angle_iterations_2 < 800)
+        setTimeout(() => { angle_iterations_6 += 1}, 500)
+}
+
+function drawFinalIntercalado(){
+    background(0)
+    next_button.position(-1000, -1000)
+    prev_button.position(-1000, -1000)
+    slider.position(-1000, -1000)
+    const center = {x: width / 2, y: height / 2}
+    noStroke()
+    fill(255)
+    circle(center.x, center.y, 10)
+
+    let current_radius = START_RADIUS
+    for(let i = 0; i < angle_iterations_7; i++){
+        let current_golden_angle = GOLDEN_ANGLE * i;
+        if(i % 3 == 0) current_radius += 1
+        const coords = getPolarCoords(toRadians(current_golden_angle), current_radius);
+        const final_coords = sumCoordinates(center, coords)
+        let shape_color = calculateColorGradient(current_golden_angle)
+        if(current_golden_angle % 2)
+            fill(color_a[0], color_b[1], color_a[2])
+        else 
+            fill(color_b[0], color_b[1], color_b[2])
+        stroke(0)
+        strokeWeight(1)
+        push()
+        ellipse(final_coords.x, final_coords.y, i * 0.05, i * 0.08, 6)
+        pop()
+    }
+    if(angle_iterations_2 < 800)
+        setTimeout(() => { angle_iterations_7 += 1}, 500)
+}
+
+function calculateColorGradient(angle){
+    let value = angle % 360
+    let red_range = [Math.min(color_a[0], color_b[0]), Math.max(color_a[0], color_b[0])]
+    let green_range = [Math.min(color_a[1], color_b[1]), Math.max(color_a[1], color_b[1])]
+    let blue_range = [Math.min(color_a[2], color_b[2]), Math.max(color_a[2], color_b[2])]
+    let r = map(value, 0, 360, red_range[0], red_range[1])
+    let g = map(value, 0, 360, green_range[0], green_range[1])
+    let b = map(value, 0, 360, blue_range[0], blue_range[1])
+    return { r, g, b }
 }
 
 function calculateColor(angle, radius){

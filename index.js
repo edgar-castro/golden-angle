@@ -299,7 +299,7 @@ function drawFinalIntercalado(){
         const coords = getPolarCoords(toRadians(current_golden_angle), current_radius);
         const final_coords = sumCoordinates(center, coords)
         let shape_color = calculateColorGradient(current_golden_angle)
-        if(current_golden_angle % 2)
+        if(current_golden_angle % 5)
             fill(color_a[0], color_b[1], color_a[2])
         else 
             fill(color_b[0], color_b[1], color_b[2])
